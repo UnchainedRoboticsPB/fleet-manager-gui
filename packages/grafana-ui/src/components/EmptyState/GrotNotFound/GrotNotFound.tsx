@@ -1,12 +1,11 @@
 import { css } from '@emotion/css';
 import { SVGProps, useEffect, useRef } from 'react';
-import SVG from 'react-inlinesvg';
 
 import { GrafanaTheme2 } from '@grafana/data';
 
 import { useStyles2 } from '../../../themes/ThemeContext';
 
-import notFoundSvg from './grot-not-found.svg';
+import notFoundPng from './not-found-robot-icon.png';
 
 const MIN_ARM_ROTATION = -20;
 const MAX_ARM_ROTATION = 5;
@@ -51,8 +50,7 @@ export const GrotNotFound = ({ width = 'auto', height }: Props) => {
       window.removeEventListener('mousemove', handleMouseMove);
     };
   }, []);
-
-  return <SVG innerRef={svgRef} src={notFoundSvg} className={styles.svg} height={height} width={width} />;
+  return <img src={notFoundPng} className={styles.svg} alt="NotFoundRobotIcon" height={height} width={width} />;
 };
 
 GrotNotFound.displayName = 'GrotNotFound';

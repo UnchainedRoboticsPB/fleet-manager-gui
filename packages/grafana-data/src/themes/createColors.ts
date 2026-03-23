@@ -131,14 +131,14 @@ class DarkColors implements ThemeColorsBase<Partial<ThemeRichColor>> {
     primary: `rgb(${this.whiteBase})`,
     secondary: `rgba(${this.whiteBase}, 0.65)`,
     disabled: `rgba(${this.whiteBase}, 0.61)`,
-    link: palette.blueDarkText,
+    link: palette.greenDarkText,
     maxContrast: palette.white,
   };
 
   primary = {
-    main: palette.blueDarkMain,
-    text: palette.blueDarkText,
-    border: palette.blueDarkText,
+    main: palette.greenDarkMain,
+    text: palette.greenDarkText,
+    border: palette.greenDarkText,
   };
 
   secondary = {
@@ -158,8 +158,8 @@ class DarkColors implements ThemeColorsBase<Partial<ThemeRichColor>> {
   };
 
   success = {
-    main: palette.greenDarkMain,
-    text: palette.greenDarkText,
+    main: palette.blueDarkMain,
+    text: palette.blueDarkText,
   };
 
   warning = {
@@ -168,9 +168,9 @@ class DarkColors implements ThemeColorsBase<Partial<ThemeRichColor>> {
   };
 
   background = {
-    canvas: palette.gray05,
-    primary: palette.gray10,
-    secondary: palette.gray15,
+    canvas: palette.gray20,
+    primary: palette.gray30,
+    secondary: palette.gray05,
     elevated: palette.gray15,
   };
 

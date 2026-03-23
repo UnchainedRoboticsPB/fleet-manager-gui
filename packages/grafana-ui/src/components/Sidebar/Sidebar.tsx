@@ -5,6 +5,7 @@ import { GrafanaTheme2 } from '@grafana/data';
 import { selectors } from '@grafana/e2e-selectors';
 import { t } from '@grafana/i18n';
 
+import { palette } from '../../../../grafana-data/src/themes/palette';
 import { useStyles2, useTheme2 } from '../../themes/ThemeContext';
 import { getPortalContainer } from '../Portal/Portal';
 

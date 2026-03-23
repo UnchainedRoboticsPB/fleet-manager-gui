@@ -1,13 +1,12 @@
 import { css, cx } from '@emotion/css';
 import { FC, type JSX } from 'react';
 
-import { colorManipulator, GrafanaTheme2, NavModelItem } from '@grafana/data';
+import { GrafanaTheme2, NavModelItem } from '@grafana/data';
 import { selectors } from '@grafana/e2e-selectors';
 import { reportInteraction } from '@grafana/runtime';
 import { Tooltip, useStyles2, useTheme2 } from '@grafana/ui';
-import g8LoginDarkSvg from 'img/g8_login_dark.svg';
-import g8LoginLightSvg from 'img/g8_login_light.svg';
-import grafanaIconSvg from 'img/grafana_icon.svg';
+import unchainedIconSvg from 'img/unchained_icon.svg';
+import unchainedIconWhiteSvg from 'img/unchained_icon_white.svg';
 
 export interface BrandComponentProps {
   className?: string;
@@ -15,7 +14,7 @@ export interface BrandComponentProps {
 }
 
 export const LoginLogo: FC<BrandComponentProps & { logo?: string }> = ({ className, logo }) => {
-  return <img className={className} src={`${logo ? logo : grafanaIconSvg}`} alt="Grafana" />;
+  return <img className={className} src={`${logo ? logo : unchainedIconSvg}`} alt="Unchained" />;
 };
 
 const LoginBackground: FC<BrandComponentProps> = ({ className, children }) => {
@@ -29,21 +28,7 @@ const LoginBackground: FC<BrandComponentProps> = ({ className, children }) => {
       right: 0,
       bottom: 0,
       top: 0,
-      background: `url(${theme.isDark ? g8LoginDarkSvg : g8LoginLightSvg})`,
-      backgroundPosition: 'top center',
-      backgroundSize: 'auto',
-      backgroundRepeat: 'no-repeat',
-
-      opacity: 0,
-
-      [theme.transitions.handleMotion('no-preference', 'reduce')]: {
-        transition: 'opacity 3s ease-in-out',
-      },
-
-      [theme.breakpoints.up('md')]: {
-        backgroundPosition: 'center',
-        backgroundSize: 'cover',
-      },
+      background: theme.colors.background.canvas,
     },
   });
 
@@ -51,7 +36,13 @@ const LoginBackground: FC<BrandComponentProps> = ({ className, children }) => {
 };
 
 const MenuLogo: FC<BrandComponentProps> = ({ className }) => {
-  return <img className={className} src={grafanaIconSvg} alt="Grafana" />;
+  const theme = useTheme2();
+
+  return theme.isDark ? (
+    <img className={className} src={unchainedIconWhiteSvg} alt="Unchained" />
+  ) : (
+    <img className={className} src={unchainedIconSvg} alt="Unchained" />
+  );
 };
 
 /**
@@ -106,8 +97,9 @@ function homeLinkStyles(theme: GrafanaTheme2) {
 
 const LoginBoxBackground = () => {
   const theme = useTheme2();
+
   return css({
-    background: colorManipulator.alpha(theme.colors.background.primary, 0.7),
+    background: theme.colors.background.primary,
     backgroundSize: 'cover',
   });
 };
@@ -117,9 +109,9 @@ export class Branding {
   static LoginBackground = LoginBackground;
   static MenuLogo = MenuLogo;
   static LoginBoxBackground = LoginBoxBackground;
-  static AppTitle = 'Grafana';
-  static LoginTitle = 'Welcome to Grafana';
-  static HideEdition = false;
+  static AppTitle = 'Observatory';
+  static LoginTitle = 'Observatory';
+  static HideEdition = true;
   static GetLoginSubTitle = (): null | string => {
     return null;
   };

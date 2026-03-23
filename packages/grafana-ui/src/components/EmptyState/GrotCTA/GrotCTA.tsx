@@ -1,12 +1,11 @@
 import { css } from '@emotion/css';
 import { SVGProps } from 'react';
-import SVG from 'react-inlinesvg';
 
 import { GrafanaTheme2 } from '@grafana/data';
 
 import { useStyles2 } from '../../../themes/ThemeContext';
 
-import grotCTASvg from './grot-cta.svg';
+import notFoundPng from './not-found-robot-icon.png';
 
 export interface Props {
   width?: SVGProps<SVGElement>['width'];
@@ -16,7 +15,7 @@ export interface Props {
 export const GrotCTA = ({ width = 'auto', height }: Props) => {
   const styles = useStyles2(getStyles);
 
-  return <SVG src={grotCTASvg} className={styles.svg} height={height} width={width} />;
+  return <img src={notFoundPng} className={styles.svg} alt="NotFoundRobotIcon" height={height} width={width} />;
 };
 
 GrotCTA.displayName = 'GrotCTA';

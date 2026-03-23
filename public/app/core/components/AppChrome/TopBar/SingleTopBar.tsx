@@ -121,6 +121,7 @@ const getStyles = (theme: GrafanaTheme2, menuDockedAndOpen: boolean) => ({
     paddingLeft: menuDockedAndOpen ? theme.spacing(3.5) : theme.spacing(0.75),
     borderBottom: `1px solid ${theme.colors.border.weak}`,
     justifyContent: 'space-between',
+    background: theme.colors.background.secondary,
   }),
   breadcrumbsWrapper: css({
     display: 'flex',

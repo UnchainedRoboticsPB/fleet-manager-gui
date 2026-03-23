@@ -76,6 +76,7 @@ const getStyles = (theme: GrafanaTheme2) => ({
     padding: theme.spacing(0, 1, 0, 1),
     height: getChromeHeaderLevelHeight(),
     flexShrink: 0,
+    background: theme.colors.background.secondary,
   }),
   flexGrow: css({ flexGrow: 1 }),
 });
