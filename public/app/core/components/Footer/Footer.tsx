@@ -2,7 +2,6 @@ import { css } from '@emotion/css';
 import { memo } from 'react';
 
 import { GrafanaTheme2, LinkTarget } from '@grafana/data';
-import { t } from '@grafana/i18n';
 import { config } from '@grafana/runtime';
 import { Icon, IconName, useStyles2 } from '@grafana/ui';
 
@@ -14,30 +13,17 @@ export interface FooterLink {
   url?: string;
 }
 
+/**
+ * No links.
+ *
+ * Upstream points these at Grafana's documentation, its Enterprise page and
+ * its community forum. This is a product a customer signs into, and none of
+ * the three is somewhere to send them. The version line that Footer appends
+ * separately is kept: it is what makes a running instance identifiable in a
+ * support conversation.
+ */
 export let getFooterLinks = (): FooterLink[] => {
-  return [
-    {
-      target: '_blank',
-      id: 'documentation',
-      text: t('nav.help/documentation', 'Documentation'),
-      icon: 'document-info',
-      url: 'https://grafana.com/docs/grafana/latest/?utm_source=grafana_footer',
-    },
-    {
-      target: '_blank',
-      id: 'support',
-      text: t('nav.help/support', 'Support'),
-      icon: 'question-circle',
-      url: 'https://grafana.com/products/enterprise/?utm_source=grafana_footer',
-    },
-    {
-      target: '_blank',
-      id: 'community',
-      text: t('nav.help/community', 'Community'),
-      icon: 'comments-alt',
-      url: 'https://community.grafana.com/?utm_source=grafana_footer',
-    },
-  ];
+  return [];
 };
 
 export function getVersionMeta(version: string) {

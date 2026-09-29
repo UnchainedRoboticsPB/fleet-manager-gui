@@ -33,6 +33,14 @@ export const LoginLayout = ({ children, branding, isChangingPassword }: React.Pr
   const loginLogo = branding?.loginLogo;
   const hideEdition = branding?.hideEdition ?? Branding.HideEdition;
 
+  // "LUNA.OBSERVATORY" is set as one string so a whitelabelled loginTitle still
+  // works; it is split here so the part after the dot can take the accent
+  // colour, as it does in the application header. A title with no dot renders
+  // whole.
+  const dotIndex = loginTitle.indexOf('.');
+  const titleLead = dotIndex >= 0 ? loginTitle.slice(0, dotIndex + 1) : loginTitle;
+  const titleAccent = dotIndex >= 0 ? loginTitle.slice(dotIndex + 1) : '';
+
   useEffect(() => setStartAnim(true), []);
 
   return (
@@ -50,7 +58,10 @@ export const LoginLayout = ({ children, branding, isChangingPassword }: React.Pr
                 </h1>
               ) : (
                 <>
-                  <h1 className={loginStyles.mainTitle}>{loginTitle}</h1>
+                  <h1 className={loginStyles.mainTitle}>
+                    {titleLead}
+                    {titleAccent && <span className={loginStyles.mainTitleAccent}>{titleAccent}</span>}
+                  </h1>
                   {subTitle && <h3 className={loginStyles.subTitle}>{subTitle}</h3>}
                 </>
               )}
@@ -130,11 +141,16 @@ export const getLoginStyles = (theme: GrafanaTheme2) => {
       textAlign: 'center',
     }),
     mainTitle: css({
-      fontSize: 22,
+      fontSize: 20,
+      letterSpacing: '0.04em',
+      textTransform: 'uppercase',
 
       [theme.breakpoints.up('sm')]: {
-        fontSize: 32,
+        fontSize: 28,
       },
+    }),
+    mainTitleAccent: css({
+      color: theme.colors.primary.text,
     }),
     subTitle: css({
       fontSize: theme.typography.size.md,

@@ -101,6 +101,7 @@ const LoginBoxBackground = () => {
   return css({
     background: theme.colors.background.primary,
     backgroundSize: 'cover',
+    border: `1px solid ${theme.colors.border.weak}`,
   });
 };
 
@@ -110,7 +111,7 @@ export class Branding {
   static MenuLogo = MenuLogo;
   static LoginBoxBackground = LoginBoxBackground;
   static AppTitle = 'Observatory';
-  static LoginTitle = 'Observatory';
+  static LoginTitle = 'LUNA.OBSERVATORY';
   static HideEdition = true;
   static GetLoginSubTitle = (): null | string => {
     return null;
