@@ -10,9 +10,9 @@
 
     <base href="[[.AppSubUrl]]/" />
 
-    <link rel="icon" id="unchained_favicon" type="image/png" href="[[.Assets.ContentDeliveryURL]]public/build/img/fav32.png" />
+    <link rel="icon" id="unchained_favicon" type="image/svg+xml" href="[[.Assets.ContentDeliveryURL]]public/build/img/unchained_icon.svg" />
     <link rel="apple-touch-icon" sizes="180x180" href="[[.Assets.ContentDeliveryURL]]public/build/img/apple-touch-icon.png" />
-    <link rel="mask-icon" href="[[.Assets.ContentDeliveryURL]]public/build/img/grafana_mask_icon.svg" color="#F05A28" />
+    <link rel="mask-icon" href="[[.Assets.ContentDeliveryURL]]public/build/img/unchained_icon.svg" color="#36FF9A" />
 
     [[range $asset := .Assets.CSSFiles]]
       <link rel="stylesheet" href="[[$asset.FilePath]]" />
@@ -38,8 +38,7 @@
         :root {
           --fs-loader-bg: #f4f5f5;
           --fs-loader-text-color: rgb(36, 41, 46);
-          --fs-spinner-arc-color: #F55F3E;
-          --fs-spinner-track-color: rgba(36, 41, 46, 0.12);
+          --fs-brand-color: #1BC074;
           --fs-color-error: #e0226e;
         }
 
@@ -48,16 +47,15 @@
           :root {
             --fs-loader-bg: #111217;
             --fs-loader-text-color: rgb(204, 204, 220);
-            --fs-spinner-arc-color: #F55F3E;
-            --fs-spinner-track-color: rgba(204, 204, 220, 0.12);
+            --fs-brand-color: #36FF9A;
             --fs-color-error: #d10e5c;
           }
         }
 
-        @keyframes spin {
-          to {
-            transform: rotate(360deg);
-          }
+        /* The mark is the progress indicator; there is no separate spinner. */
+        @keyframes fs-mark-pulse {
+          0%, 100% { opacity: 1; }
+          50%      { opacity: 0.3; }
         }
 
         body {
@@ -86,18 +84,24 @@
           display: none;
         }
 
-        .fs-spinner {
-          animation: spin 1500ms linear infinite;
-          width: 32px;
-          height: 32px;
+        .fs-mark {
+          width: 56px;
+          height: 56px;
+          margin-bottom: 22px;
+          fill: var(--fs-brand-color);
         }
 
-        .fs-spinner-track {
-          stroke: rgba(255,255,255,.15);
+        /* Only while loading: a pulsing mark on the error screen would claim
+           something is still happening. The error path hides .fs-variant-loader,
+           which is what this reads. */
+        .preloader:has(.fs-variant-loader:not(.fs-hidden)) .fs-mark {
+          animation: fs-mark-pulse 1600ms ease-in-out infinite;
         }
 
-        .fs-spinner-arc {
-          stroke: #F55F3E;
+        @media (prefers-reduced-motion: reduce) {
+          .fs-mark {
+            animation: none !important;
+          }
         }
 
         .fs-loader-text {
@@ -120,18 +124,12 @@
         }
       </style>
 
-      <div class="fs-variant-loader">
-        <svg
-          width="32"
-          height="32"
-          class="fs-spinner"
-          viewBox="0 0 100 100"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <circle class="fs-spinner-track" cx="50" cy="50" r="45" fill="none" stroke-width="10" />
-          <circle class="fs-spinner-arc" cx="50" cy="50" r="45" fill="none" stroke-width="10" stroke-linecap="round" stroke-dasharray="70.7 212.3" stroke-dashoffset="0" />
-        </svg>
+      <svg class="fs-mark" viewBox="0 0 2000 2000" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <circle cx="448.3" cy="449.3" r="337.3" />
+        <path d="M1888,1551.7c0-78.3-26.7-150.4-71.5-207.6c-6-7.6-11.7-15.5-16.8-23.8c-58-92.7-91.5-202.3-91.5-319.8c0-117.6,33.6-227.2,91.6-320c5.1-8.1,10.6-15.8,16.5-23.3c11.6-14.8,22-30.5,31-47.1c26.3-48.4,41.1-104.1,40.7-163.2c-1.3-186.2-151.8-335.3-338-334.9c-138.6,0.3-257.6,84.2-309.2,204l0,0c0,0,0,0.1-0.1,0.2c-4.5,10.4-8.4,21-11.8,31.9c-37.5,97.9-160.3,396.2-323.4,559.3c-162.6,162.6-458.8,284.5-557.5,322.2c-11.2,3.5-22.1,7.6-32.8,12.1c-0.1,0-0.2,0.1-0.2,0.1l0,0c-120,51.7-204,171-204,309.9C111,1738,262,1889,448.3,1889c153.4,0,282.8-102.4,323.8-242.6c39.8-103.5,160.3-392.4,320.2-552.2c78.3-78.3,187.8-147.4,291.3-202.1c6.4,35.2,9.7,71.4,9.7,108.4c0,117.5-33.5,227.1-91.5,319.8c-5.1,8.2-10.8,16.1-16.8,23.8c-44.8,57.2-71.5,129.3-71.5,207.6c0,186.3,151,337.3,337.3,337.3C1737,1889,1888,1738,1888,1551.7z" />
+      </svg>
 
+      <div class="fs-variant-loader">
         <p class="fs-loader-text">Observatory is starting up...</p>
       </div>
 
