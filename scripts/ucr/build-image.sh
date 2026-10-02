@@ -147,6 +147,12 @@ if [ "$PUSH" = true ]; then
   note "  git push origin v${VERSION}"
 else
   note ""
-  note "Not pushed. Re-run with --push when you are happy with it."
+  note "Not pushed. The image is tagged with its full registry path, so once"
+  note "you have tested it there is no need to build again:"
+  note ""
+  note "  docker push ${REGISTRY}/${IMAGE}:${VERSION}"
+  note ""
+  note "To test it on another machine first:"
+  note "  ssh <this-host> 'docker save ${REGISTRY}/${IMAGE}:${VERSION} | gzip -1' | gunzip | docker load"
 fi
 note ""
