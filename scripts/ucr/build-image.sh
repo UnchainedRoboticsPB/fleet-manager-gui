@@ -126,6 +126,7 @@ docker build \
   --platform linux/amd64 \
   --build-arg "COMMIT_SHA=${COMMIT_SHA}" \
   --build-arg "BUILD_BRANCH=${BUILD_BRANCH}" \
+  --build-arg "BUILD_NUMBER=ucr.${BUILD_NUMBER}" \
   --label "org.opencontainers.image.version=${VERSION}" \
   --label "org.opencontainers.image.revision=${COMMIT_SHA}" \
   --label "org.opencontainers.image.created=${BUILT_AT}" \

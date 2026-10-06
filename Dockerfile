@@ -62,6 +62,11 @@ FROM ${GO_IMAGE} AS go-builder
 
 ARG COMMIT_SHA=""
 ARG BUILD_BRANCH=""
+# Becomes the version Grafana reports on /api/health and in the footer:
+# the Makefile substitutes it for package.json's "-pre" suffix, so
+# 13.0.0-pre + ucr.1 reads as 13.0.0-ucr.1. Left unset it is "local",
+# which is what a production instance was reporting.
+ARG BUILD_NUMBER=local
 ARG GO_BUILD_TAGS="oss"
 ARG WIRE_TAGS="oss"
 
@@ -106,7 +111,7 @@ ENV BUILD_BRANCH=${BUILD_BRANCH}
 
 RUN --mount=type=cache,target=/go/pkg/mod \
     --mount=type=cache,target=/root/.cache/go-build \
-    make build-go GO_BUILD_TAGS=${GO_BUILD_TAGS} WIRE_TAGS=${WIRE_TAGS}
+    make build-go GO_BUILD_TAGS=${GO_BUILD_TAGS} WIRE_TAGS=${WIRE_TAGS} BUILD_NUMBER=${BUILD_NUMBER}
 
 RUN mkdir -p data/plugins-bundled
 

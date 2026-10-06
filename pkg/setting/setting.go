@@ -51,6 +51,12 @@ const (
 	Dev              = "development"
 	Prod             = "production"
 	ApplicationName  = "Grafana"
+	// ProductName is what this build calls itself in user-facing version
+	// strings. ApplicationName is left alone deliberately: it also feeds
+	// AppName in the index DTO and a handful of internal identifiers, and
+	// this change is about what the login footer says, not about renaming
+	// Grafana to itself.
+	ProductName = "Observatory"
 )
 
 // zoneInfo names environment variable for setting the path to look for the timezone database in go
