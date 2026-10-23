@@ -30,11 +30,26 @@ import './keyboard.css';
  *   than carried unused.
  */
 
+/** The width the Satellite stylesheet is drawn for; scaled down to fit. */
 const KEYBOARD_WIDTH = 1000;
-const GAP = 10;
 
-/** Height of the four-row text layout, for deciding above or below. */
+/** Its natural height at that width — the five rows plus the container pad. */
 const KEYBOARD_HEIGHT = 394;
+
+/** Breathing room between the focused field and the keyboard below it. */
+const GAP = 12;
+
+/**
+ * The most of the frame the keyboard may take.
+ *
+ * Observatory is an iframe in a Satellite page, sized `h-full w-full` into
+ * whatever box the HMI author drew — there is no height to rely on. Floating
+ * the keyboard beside the field assumed one: in a 645px frame it did not fit
+ * below, flipped above, and was clipped a hundred pixels into Satellite's own
+ * header. Pinned to the bottom and scaled to a share of the frame, it fits
+ * every box, and the form is lifted clear when it would otherwise be covered.
+ */
+const MAX_SHARE = 0.55;
 
 type LayoutName = 'default' | 'shift' | 'german' | 'shiftgerman';
 
@@ -132,30 +147,51 @@ function isTypable(el: EventTarget | null): el is HTMLInputElement | HTMLTextAre
 
 export function OnScreenKeyboard() {
   const [target, setTarget] = useState<HTMLInputElement | HTMLTextAreaElement | null>(null);
-  const [position, setPosition] = useState<{ top: number; left: number } | null>(null);
+  const [scale, setScale] = useState(1);
   const [layoutName, setLayoutName] = useState<LayoutName>(initialLayout);
   const keyboardRef = useRef<KeyboardReactInterface | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  /**
+   * Fit the keyboard to the frame, and lift the form out from under it.
+   *
+   * The lift is an offset on the form rather than a scroll, because the
+   * sign-in page does not scroll — its layout is exactly the height of the
+   * frame, so there is nowhere to scroll to.
+   *
+   * Two things this had to learn the hard way.
+   *
+   * `top`, not `transform`: LoginLayout animates the card in with
+   * `flyInAnimation`, and a CSS animation outranks an inline style in the
+   * cascade, so a transform set here computed away to the identity matrix
+   * and nothing moved.
+   *
+   * And the body, not the form: the card sits in a container that hides its
+   * overflow, so lifting the form slid it up *inside* that box and the field
+   * was clipped out of sight — clear of the keyboard by measurement, and
+   * invisible on screen. Moving the body takes the clipping box with it.
+   */
   const place = useCallback((el: HTMLElement) => {
-    const rect = el.getBoundingClientRect();
-    const { scrollX, scrollY } = window;
+    const vw = window.innerWidth;
+    const vh = window.innerHeight;
+    const next = Math.min(1, vw / KEYBOARD_WIDTH, (vh * MAX_SHARE) / KEYBOARD_HEIGHT);
+    setScale(next);
 
-    // Centred on the field, then pulled back inside the viewport.
-    const centre = rect.left + scrollX + rect.width / 2;
-    const left = Math.max(0, Math.min(centre - KEYBOARD_WIDTH / 2, window.innerWidth + scrollX - KEYBOARD_WIDTH));
-
-    // Below by default; above when below would run off the bottom.
-    let top = rect.bottom + scrollY + GAP;
-    if (top + KEYBOARD_HEIGHT > window.innerHeight + scrollY) {
-      top = rect.top + scrollY - KEYBOARD_HEIGHT - GAP;
+    // Measure with any previous lift removed, or each focus would stack on
+    // the last and walk the page off the top of the frame.
+    const body = document.body;
+    body.style.top = '';
+    const covered = el.getBoundingClientRect().bottom + GAP - (vh - KEYBOARD_HEIGHT * next);
+    if (covered > 0) {
+      body.style.position = 'relative';
+      body.style.transition = 'top 120ms ease-out';
+      body.style.top = `${-Math.round(covered)}px`;
     }
-    setPosition({ top, left });
   }, []);
 
   const close = useCallback(() => {
+    document.body.style.top = '';
     setTarget(null);
-    setPosition(null);
   }, []);
 
   // Attach on focus, since Grafana's inputs know nothing about this.
@@ -199,13 +235,22 @@ export function OnScreenKeyboard() {
     };
   }, [target, place, close]);
 
-  // Shift changes the layout's height by a row on some languages, so the
-  // keyboard re-places itself rather than drifting over the field.
+  // Whatever happens, the page does not stay pushed up: an unmount while the
+  // keyboard is open would otherwise leave the body offset for good.
+  useEffect(() => () => {
+    document.body.style.top = '';
+  }, []);
+
+  // The frame is resizable — an HMI author can redraw the page under us — so
+  // the fit is recomputed rather than fixed at the moment of focus.
   useEffect(() => {
-    if (target) {
-      place(target);
+    if (!target) {
+      return;
     }
-  }, [layoutName, target, place]);
+    const onResize = () => place(target);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, [target, place]);
 
   // After mount, not on focus: the keyboard does not exist until a field has
   // one, so seeding it from the focus handler set nothing the first time.
@@ -283,35 +328,54 @@ export function OnScreenKeyboard() {
     target.dispatchEvent(new Event('change', { bubbles: true }));
   };
 
-  if (!target || !position) {
+  if (!target) {
     return null;
   }
 
   return ReactDOM.createPortal(
+    // Fixed to the frame, not placed in the document: `position: fixed` in an
+    // iframe is relative to that iframe's own viewport, which is exactly the
+    // box the keyboard has to stay inside.
     <div
-      id="on-screen-keyboard"
       ref={containerRef}
       style={{
-        position: 'absolute',
-        top: position.top,
-        left: position.left,
+        position: 'fixed',
+        left: 0,
+        right: 0,
+        bottom: 0,
         zIndex: 9999,
-        width: '100%',
-        maxWidth: `${KEYBOARD_WIDTH}px`,
+        display: 'flex',
+        justifyContent: 'center',
+        pointerEvents: 'none',
       }}
     >
-      <Keyboard
-        layout={LAYOUT}
-        layoutName={layoutName}
-        keyboardRef={(r) => (keyboardRef.current = r)}
-        display={DISPLAY}
-        onChange={() => {}}
-        onKeyPress={press}
-        autoUseTouchEvents={true}
-        useMouseEvents={true}
+      <div
+        id="on-screen-keyboard"
+        style={{
+          width: KEYBOARD_WIDTH,
+          // Not a flex item that shrinks: left to itself it would be squeezed
+          // to the frame first and then scaled, shrinking twice and squashing
+          // the keys sideways — 24px wide against 34 tall in an 820px frame.
+          // The scale alone decides the size, so the keys keep their shape.
+          flexShrink: 0,
+          transform: `scale(${scale})`,
+          transformOrigin: 'bottom center',
+          pointerEvents: 'auto',
+        }}
+      >
+        <Keyboard
+          layout={LAYOUT}
+          layoutName={layoutName}
+          keyboardRef={(r) => (keyboardRef.current = r)}
+          display={DISPLAY}
+          onChange={() => {}}
+          onKeyPress={press}
+          autoUseTouchEvents={true}
+          useMouseEvents={true}
         preventMouseDownDefault={true}
-        preventMouseUpDefault={true}
-      />
+          preventMouseUpDefault={true}
+        />
+      </div>
     </div>,
     document.body
   );
