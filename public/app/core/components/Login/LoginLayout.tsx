@@ -9,6 +9,7 @@ import { useStyles2 } from '@grafana/ui';
 import { Branding } from '../Branding/Branding';
 import { BrandingSettings } from '../Branding/types';
 import { Footer } from '../Footer/Footer';
+import { OnScreenKeyboard, isEmbedded } from '../OnScreenKeyboard/OnScreenKeyboard';
 
 interface InnerBoxProps {
   enterAnimation?: boolean;
@@ -71,6 +72,11 @@ export const LoginLayout = ({ children, branding, isChangingPassword }: React.Pr
         </div>
       </div>
       {branding?.hideFooter ? <></> : <Footer hideEdition={hideEdition} customLinks={branding?.footerLinks} />}
+      {/* Mounted here rather than per form, because this layout is what every
+          sign-in page shares — login, sign-up, verify e-mail, reset and change
+          password. Embedded only: in a browser tab the operator has a real
+          keyboard, and a 1000px one covering the form would be in the way. */}
+      {isEmbedded() ? <OnScreenKeyboard /> : <></>}
     </Branding.LoginBackground>
   );
 };

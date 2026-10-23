@@ -1,0 +1,183 @@
+/*
+ * On-Screen Keyboard — Satellite Theme
+ *
+ * Copied verbatim from orbiter `packages/ui/src/styles/keyboard.css`. The
+ * keyboard appears on a panel that also runs Satellite, so the two have to be
+ * the same object to the operator — which is why this is a copy and not an
+ * interpretation. Restyle it there and copy it here again; do not edit it in
+ * place, or the next comparison on the shop floor finds two keyboards.
+ */
+#on-screen-keyboard {
+  font-family: inherit;
+}
+
+/* Keyboard container styling */
+#on-screen-keyboard .simple-keyboard {
+  background-color: #313130 !important;
+  border-radius: 16px !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+  padding: 16px !important;
+}
+
+#on-screen-keyboard .hg-layout-calculator {
+  border-top-left-radius: 0px !important;
+  border-top-right-radius: 0px !important;
+}
+
+/* Button styling matching satellite design */
+#on-screen-keyboard .simple-keyboard .hg-rows .hg-row .hg-button {
+  height: 60px !important;
+  background-color: #4f4f4f !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 12px !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  margin: 4px !important;
+  transition: all 0.15s ease-in-out !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Special keys styling */
+#on-screen-keyboard
+  .simple-keyboard
+  .hg-rows
+  .hg-row
+  .hg-button.hg-functionBtn {
+  background-color: #313130 !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  font-size: 14px !important;
+}
+
+#on-screen-keyboard
+  .simple-keyboard
+  .hg-rows
+  .hg-row
+  .hg-button.hg-functionBtn:hover {
+  background-color: #1fdb84 !important;
+  color: #000000 !important;
+  border-color: #1fdb84 !important;
+}
+
+/* Space bar styling */
+#on-screen-keyboard
+  .simple-keyboard
+  .hg-rows
+  .hg-row
+  .hg-button[data-skbtn="{space}"] {
+  background-color: #4f4f4f !important;
+}
+
+#on-screen-keyboard
+  .simple-keyboard
+  .hg-rows
+  .hg-row
+  .hg-button[data-skbtn="{space}"]:hover {
+  background-color: #36ff9a !important;
+  color: #000000 !important;
+}
+
+/* Pressed button state for active keys */
+#on-screen-keyboard
+  .simple-keyboard
+  .hg-rows
+  .hg-row
+  .hg-button.hg-activeButton {
+  background-color: #1fdb84 !important;
+  color: #000000 !important;
+  border-color: #36ff9a !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Number pad specific styling */
+#on-screen-keyboard .simple-keyboard.numpad {
+  background-color: #313130 !important;
+  max-width: 300px !important;
+}
+
+#on-screen-keyboard .simple-keyboard.numpad .hg-rows .hg-row .hg-button {
+  height: 70px !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+}
+
+/* Keyboard rows spacing */
+#on-screen-keyboard .simple-keyboard .hg-rows {
+  gap: 8px !important;
+}
+
+#on-screen-keyboard .simple-keyboard .hg-row {
+  gap: 4px !important;
+}
+#on-screen-keyboard .simple-keyboard .hg-rows .hg-row .hg-button:active {
+  background-color: #1fdb84 !important;
+  color: #000000 !important;
+  border-color: #36ff9a !important;
+  transition: all 0.05s ease-in-out !important; /* Very fast flash */
+}
+
+#on-screen-keyboard .hg-button.hg-activeButton {
+  transition: all 0.2s ease-out !important;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  #on-screen-keyboard .simple-keyboard .hg-rows .hg-row .hg-button:hover {
+    background-color: #4f4f4f !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    transform: none !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+  }
+
+  #on-screen-keyboard .simple-keyboard .hg-rows .hg-row .hg-button:active {
+    background-color: #1fdb84 !important;
+    color: #000000 !important;
+    border-color: #36ff9a !important;
+    transition: all 0.05s ease-in-out !important;
+  }
+
+  #on-screen-keyboard .hg-button.hg-activeButton {
+    transition: all 0.3s ease-out !important;
+  }
+}
+
+#on-screen-keyboard
+  .simple-keyboard
+  .hg-rows
+  .hg-row
+  .hg-button.hg-functionBtn:active {
+  background-color: #1fdb84 !important;
+  color: #000000 !important;
+  transition: all 0.05s ease-in-out !important;
+}
+
+/* Number pad - same flash behavior */
+#on-screen-keyboard .simple-keyboard.numpad .hg-rows .hg-row .hg-button:active {
+  background-color: #1fdb84 !important;
+  color: #000000 !important;
+  transition: all 0.05s ease-in-out !important;
+}
+
+/* Larger font size for calculator operator buttons */
+#on-screen-keyboard .simple-keyboard .hg-rows .hg-row .hg-button.hg-functionBtn.hg-button-subtract,
+#on-screen-keyboard .simple-keyboard .hg-rows .hg-row .hg-button.hg-functionBtn.hg-button-divide,
+#on-screen-keyboard .simple-keyboard .hg-rows .hg-row .hg-button.hg-functionBtn.hg-button-multiply,
+#on-screen-keyboard .simple-keyboard .hg-rows .hg-row .hg-button.hg-functionBtn.hg-button-add,
+#on-screen-keyboard .simple-keyboard .hg-rows .hg-row .hg-button.hg-functionBtn.hg-button-equals,
+#on-screen-keyboard .simple-keyboard .hg-rows .hg-row .hg-button.hg-functionBtn.hg-button-reset {
+  font-size: 20px !important;
+}
+
+#on-screen-keyboard .simple-keyboard .hg-rows .hg-row .hg-button.hg-functionBtn.hg-button-equals {
+  background-color: #127e4c !important;
+}
+
+#on-screen-keyboard .simple-keyboard .hg-rows .hg-row .hg-button.hg-functionBtn.hg-button-clear {
+  background-color: #ff5c5c !important;
+  color: #000000 !important;
+}
+
+#on-screen-keyboard .hg-layout-calculator .hg-rows .hg-row .hg-button {
+  width: 120px !important;
+}

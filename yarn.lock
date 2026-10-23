@@ -20434,6 +20434,7 @@ __metadata:
     react-router-dom-v5-compat: "npm:^6.26.1"
     react-select: "npm:5.10.2"
     react-select-event: "npm:5.5.1"
+    react-simple-keyboard: "npm:3.8.91"
     react-split-pane: "npm:0.1.92"
     react-table: "npm:7.8.0"
     react-transition-group: "npm:4.4.5"
@@ -29297,6 +29298,16 @@ __metadata:
   dependencies:
     selecto: "npm:~1.26.3"
   checksum: 10/7e1e7ee7242c70027f3616e49e426fdf8aff3cdf01574203506001c5d6436c457e9ee04f7bec312294380f42b39682ed48eb7eb7e906f665f3361a5a38527976
+  languageName: node
+  linkType: hard
+
+"react-simple-keyboard@npm:3.8.91":
+  version: 3.8.91
+  resolution: "react-simple-keyboard@npm:3.8.91"
+  peerDependencies:
+    react: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: 10/e6d92f1ee58ef46d7a298942e8fe3474e11a134d6c110a87c5d92bd6b7983af17d2bfdef4b546d52bd003089dd632c305b987dc0f1dd3ae61923b6eaa866a94b
   languageName: node
   linkType: hard
 
